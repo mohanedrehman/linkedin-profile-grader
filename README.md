@@ -60,7 +60,7 @@ If `APP_ORIGIN` is omitted, the functions use Vercel's deployment hostname.
 Default Actor:
 
 ```text
-themineworks/linkedin-profile-scraper
+apimaestro/linkedin-profile-detail
 ```
 
 The app calls Apify's synchronous Actor API with a hard per-run cost ceiling and requests exactly one profile.
@@ -68,7 +68,7 @@ The app calls Apify's synchronous Actor API with a hard per-run cost ceiling and
 Optional override:
 
 ```text
-APIFY_ACTOR_ID=themineworks~linkedin-profile-scraper
+APIFY_ACTOR_ID=apimaestro~linkedin-profile-detail
 ```
 
 This keeps the scraper replaceable: if another Actor becomes more reliable or cheaper, change one environment variable rather than rebuilding the app.
