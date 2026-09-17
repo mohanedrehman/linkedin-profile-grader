@@ -7,7 +7,7 @@ A paid-first LinkedIn profile audit MVP.
 1. Customer pastes a public `linkedin.com/in/...` profile URL.
 2. The app opens a £2.99 Stripe Checkout Session.
 3. After payment, `/api/analyze` verifies the Checkout Session server-side.
-4. Bright Data's LinkedIn Profiles-by-URL scraper retrieves the public profile data.
+4. An Apify public-profile Actor retrieves the public profile data.
 5. OpenAI generates a strict structured report from that data.
 6. The completed report is cached in the customer's browser so normal reloads do not regenerate it.
 
@@ -18,7 +18,7 @@ There is **no free scraper or OpenAI call before payment**.
 - Static HTML/CSS/JS frontend
 - Vercel Functions (`api/*.js`)
 - Stripe hosted Checkout
-- Bright Data LinkedIn Profiles-by-URL dataset
+- Apify LinkedIn public-profile Actor
 - OpenAI Responses API + Structured Outputs
 - No database for the MVP
 
@@ -28,7 +28,7 @@ Add these in Vercel. Never commit them to GitHub.
 
 ```text
 STRIPE_SECRET_KEY=sk_test_...       # test mode until end-to-end testing is complete
-BRIGHTDATA_API_KEY=...
+APIFY_TOKEN=...
 OPENAI_API_KEY=...
 ```
 
@@ -43,7 +43,7 @@ If `APP_ORIGIN` is omitted, the functions use Vercel's deployment hostname.
 
 ## Abuse controls
 
-- No Bright Data or OpenAI call before verified payment.
+- No Apify or OpenAI call before verified payment.
 - Only `https://linkedin.com/in/...` profile URLs are accepted.
 - The paid profile URL is stored in Stripe Checkout metadata and cannot be swapped after payment.
 - The analysis endpoint validates product, amount (£2.99), currency (GBP), and `payment_status=paid`.
@@ -51,27 +51,27 @@ If `APP_ORIGIN` is omitted, the functions use Vercel's deployment hostname.
 - A lightweight checkout rate limit reduces session-spam noise.
 - API keys are server-side only.
 - Request bodies are capped.
-- If Bright Data cannot retrieve usable public profile data after an internal retry, the app attempts an automatic Stripe refund.
+- If Apify cannot retrieve usable public profile data after an internal retry, the app attempts an automatic Stripe refund.
 - OpenAI runs with `store: false` and a strict JSON schema.
 - Prompts explicitly prohibit invented employers, metrics, skills, achievements, dates, qualifications, or other facts.
 
-## Bright Data endpoint
+## Apify scraper
 
-Dataset: `gd_l1viktl72bvl7bjuj0`
+Default Actor:
 
 ```text
-POST https://api.brightdata.com/datasets/v3/scrape?dataset_id=gd_l1viktl72bvl7bjuj0&include_errors=true
+themineworks/linkedin-profile-scraper
 ```
 
-Body:
+The app calls Apify's synchronous Actor API with a hard per-run cost ceiling and requests exactly one profile.
 
-```json
-{
-  "input": [
-    { "url": "https://www.linkedin.com/in/example/" }
-  ]
-}
+Optional override:
+
+```text
+APIFY_ACTOR_ID=themineworks~linkedin-profile-scraper
 ```
+
+This keeps the scraper replaceable: if another Actor becomes more reliable or cheaper, change one environment variable rather than rebuilding the app.
 
 ## Local checks
 
@@ -83,7 +83,7 @@ npm run check
 
 - Use Stripe test mode for the first complete purchase.
 - Add all three environment variables in Vercel.
-- Test one real public LinkedIn URL through Bright Data.
+- Test one real public LinkedIn URL through Apify.
 - Confirm a successful OpenAI report.
 - Test an unreadable profile and confirm refund behavior.
 - Add a real support email to the site and legal pages.
