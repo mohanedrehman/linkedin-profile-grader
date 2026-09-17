@@ -1,0 +1,12 @@
+{
+  "name": "linkedin-profile-grader",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Paid-first LinkedIn profile audit using Stripe, Bright Data and OpenAI.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "check": "node --check api/create-checkout.js && node --check api/analyze.js"
+  }
+}
