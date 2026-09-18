@@ -317,7 +317,7 @@ const reportSchema = {
   additionalProperties: false,
   properties: {
     report_version: { type: "string" },
-    verdict: { type: "string" },
+    verdict: { type: "string", maxLength: 120 },
     executive_summary: {
       type: "object",
       additionalProperties: false,
@@ -599,6 +599,7 @@ NON-NEGOTIABLE FACT RULES
 - Suggested keywords and recruiter searches must be supported by the profile. Do not smuggle in aspirational skills.
 
 ANALYSIS STANDARD
+- Keep verdict to one decisive sentence of 6–12 words. It is a report headline, not a summary paragraph.
 - Diagnose the profile as a recruiter would in a 10-second first scan and a 60-second deeper scan.
 - If career direction is ambiguous, make that the central positioning diagnosis. Infer only the path most supported by current evidence and explain the ambiguity.
 - Make every recommendation specific: cite the signal, explain the opportunity cost and give an exact fix.

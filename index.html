@@ -1219,6 +1219,14 @@
           .join("");
       const copyCard = (text) =>
         `<button class="copy-btn" data-copy="${encodeURIComponent(text || "")}">Copy</button><p>${esc(text)}</p>`;
+      const scoreVerdict = (score) => {
+        if (score < 30) return "Credible evidence, but no clear positioning";
+        if (score < 50)
+          return "A credible foundation with a weak recruiter signal";
+        if (score < 70) return "Good foundations, but not yet differentiated";
+        if (score < 85) return "A strong profile with fixable conversion leaks";
+        return "A clear, differentiated recruiter signal";
+      };
       document.addEventListener("click", async (event) => {
         const button = event.target.closest(".copy-btn");
         if (!button) return;
@@ -1246,7 +1254,7 @@
             "--score",
             `${Math.max(0, Math.min(100, Number(r.overall_score) || 0))}%`,
           );
-        $("#verdict").textContent = r.verdict || "Your LinkedIn report";
+        $("#verdict").textContent = scoreVerdict(Number(r.overall_score) || 0);
         const summary = r.executive_summary || {};
         $("#recruiterRead").textContent = summary.recruiter_read || "";
         $("#profileMeta").textContent = [p.name, p.position, p.city]
