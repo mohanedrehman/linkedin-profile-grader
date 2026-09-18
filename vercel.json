@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/analyze.js": {
+      "maxDuration": 120
+    }
+  },
   "headers": [
     {
       "source": "/api/(.*)",

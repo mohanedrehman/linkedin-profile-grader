@@ -35,7 +35,7 @@ OPENAI_API_KEY=...
 Optional:
 
 ```text
-OPENAI_MODEL=gpt-5.6-luna
+OPENAI_MODEL=gpt-5.6-terra
 APP_ORIGIN=https://your-domain.example
 ```
 
@@ -54,6 +54,7 @@ If `APP_ORIGIN` is omitted, the functions use Vercel's deployment hostname.
 - If Apify cannot retrieve usable public profile data after an internal retry, the app attempts an automatic Stripe refund.
 - OpenAI runs with `store: false` and a strict JSON schema.
 - Prompts explicitly prohibit invented employers, metrics, skills, achievements, dates, qualifications, or other facts.
+- The report uses a weighted recruiter scorecard, evidence coverage, target-direction analysis, copy-ready rewrites, proof-gap questions, recruiter search phrases, and a timed action plan.
 
 ## Apify scraper
 
