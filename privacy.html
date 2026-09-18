@@ -1,9 +1,10 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Privacy – LinkedIn Profile Grader</title>
+    <meta name="robots" content="index,follow" />
+    <title>Privacy Notice – LinkedIn Profile Grader</title>
     <style>
       body {
         font-family: system-ui, sans-serif;
@@ -20,44 +21,88 @@
       h2 {
         letter-spacing: -0.03em;
       }
+      .muted {
+        color: #64748b;
+      }
     </style>
   </head>
   <body>
     <a href="/">← Back</a>
-    <h1>Privacy</h1>
+    <h1>Privacy notice</h1>
+    <p class="muted">Last updated 18 September 2026</p>
     <p>
-      This service accepts a public LinkedIn profile URL and a target-role
-      brief, uses Apify to retrieve publicly visible profile information, and
-      sends the relevant information to OpenAI to generate the report after
-      payment.
+      Mohaned Rehman, operator of LinkedIn Profile Grader, is the controller for
+      the information used to provide this service. For privacy questions or
+      requests, email
+      <a href="mailto:muhanedzaeem@gmail.com">muhanedzaeem@gmail.com</a>.
     </p>
-    <h2>What we process</h2>
+    <h2>Information we process</h2>
     <p>
-      We process the LinkedIn profile URL, the desired role and career goal,
-      optional location and industry, any achievements, tools or CV text you
-      choose to provide, publicly available profile information returned by
-      Apify, Stripe payment/session identifiers, and the generated report.
+      We process the LinkedIn profile URL you submit; your desired role, career
+      goal, optional location and industry; any achievements, tools or CV text
+      you choose to provide; publicly visible profile information retrieved from
+      the submitted LinkedIn page; Stripe payment and session identifiers;
+      technical request information needed to operate and secure the service;
+      and the generated report.
     </p>
-    <h2>Payments</h2>
     <p>
-      Payments are handled by Stripe. We do not receive or store full card
-      details. Long-form achievements and CV text are not placed in Stripe
-      metadata.
+      Public profile information comes from the LinkedIn URL you direct us to
+      analyse. Please submit your own profile, or a profile you are authorised
+      to analyse, and do not paste special-category or unnecessary sensitive
+      information into the optional fields.
     </p>
-    <h2>AI processing</h2>
+    <h2>Why we use it</h2>
     <p>
-      Retrieved profile data and the target-role brief are sent to OpenAI to
-      generate the report. The application requests <code>store:false</code> for
-      API responses.
+      We use the information to take payment, retrieve the requested public
+      profile, generate and deliver the purchased report, prevent misuse,
+      troubleshoot failures and provide refunds or support. Processing needed to
+      deliver the report is performed to fulfil the contract with you. Limited
+      security, fraud-prevention and service-reliability processing is based on
+      our legitimate interests in operating the service safely.
     </p>
-    <h2>Local storage</h2>
+    <h2>Service providers</h2>
     <p>
-      Your browser temporarily stores the intake draft and signed target-role
-      brief through checkout, then stores the completed report locally so
-      refreshing the page does not trigger another analysis. The signed brief
-      and draft are removed after a successful report.
+      Stripe processes payment information; Apify retrieves public profile data;
+      OpenAI generates the structured report; and Vercel hosts the site and
+      server functions. These providers may process information in other
+      countries under their own contractual safeguards and privacy terms. Read
+      their notices at <a href="https://stripe.com/gb/privacy">Stripe</a>,
+      <a href="https://docs.apify.com/legal/privacy-policy">Apify</a>,
+      <a href="https://openai.com/policies/privacy-policy/">OpenAI</a> and
+      <a href="https://vercel.com/legal/privacy-notice">Vercel</a>.
     </p>
-    <h2>Contact</h2>
-    <p>A support/contact address will be added before public launch.</p>
+    <p>
+      The OpenAI request uses <code>store:false</code>. We do not sell the
+      submitted profile information or use it for advertising.
+    </p>
+    <h2>Browser storage and retention</h2>
+    <p>
+      The intake draft and signed target-role brief are held in this tab's
+      session storage through checkout and are removed after successful report
+      generation or when the tab session ends. The signed brief protects
+      integrity but is not encryption. The completed report is stored in your
+      browser's local storage so a refresh does not spend another analysis
+      attempt; you can remove it by clearing site data.
+    </p>
+    <p>
+      The application does not maintain a customer-profile database. Stripe
+      retains transaction records and the service providers above may retain
+      limited operational, security and billing records according to their own
+      policies and legal obligations.
+    </p>
+    <h2>Your rights</h2>
+    <p>
+      Depending on the circumstances, you may have rights to access, correct,
+      erase, restrict, object to or receive a copy of personal information.
+      Contact support to make a request. You can also complain to the UK
+      Information Commissioner's Office at
+      <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk</a>.
+    </p>
+    <h2>Automated analysis</h2>
+    <p>
+      The report is generated automatically as career-marketing guidance. It
+      does not make a legal or similarly significant decision about you, and no
+      employer or recruiter receives it from us.
+    </p>
   </body>
 </html>

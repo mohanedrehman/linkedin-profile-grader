@@ -47,7 +47,8 @@ If `APP_ORIGIN` is omitted, the functions use Vercel's deployment hostname. If `
 - No Apify or OpenAI call before verified payment.
 - Only `https://linkedin.com/in/...` profile URLs are accepted.
 - The paid profile URL is stored in Stripe Checkout metadata and cannot be swapped after payment.
-- The full target-role brief is HMAC-signed to its Checkout Session, expires after seven days, and is rejected if altered or replayed against another session.
+- Checkout creation requires recorded acceptance of the current terms and a request for immediate digital delivery.
+- The full target-role brief is HMAC-signed to its Checkout Session, held in tab-scoped session storage, expires after seven days, and is rejected if altered or replayed against another session. Signing protects integrity; it does not encrypt the contents.
 - CV text and long-form evidence are not placed in Stripe metadata.
 - The analysis endpoint validates product, amount (£2.99), currency (GBP), and `payment_status=paid`.
 - A paid Checkout Session is limited to two analysis attempts, allowing one retry without enabling unlimited API abuse.
@@ -93,8 +94,8 @@ These checks are local and do not call Stripe, Apify, or OpenAI.
 - Test one real public LinkedIn URL through Apify.
 - Confirm a successful OpenAI report.
 - Test an unreadable profile and confirm refund behavior.
-- Add a real support email to the site and legal pages.
 - Only then switch `STRIPE_SECRET_KEY` from `sk_test_...` to `sk_live_...`.
-- Add the final domain, sitemap, robots.txt, analytics, and Search Console.
+- Replace the temporary Vercel canonical URL when a final custom domain is connected.
+- Add privacy-conscious analytics and Search Console only when wanted.
 
 This project is not affiliated with LinkedIn. LinkedIn is a trademark of LinkedIn Corporation.

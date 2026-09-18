@@ -1,7 +1,8 @@
 const { normaliseContext, signContext } = require("../lib/context-token");
 
 const PRICE = 299,
-  PRODUCT = "linkedin-profile-grader-v1";
+  PRODUCT = "linkedin-profile-grader-v1",
+  TERMS_VERSION = "2026-09-18";
 const buckets =
   globalThis.__checkoutBuckets || (globalThis.__checkoutBuckets = new Map());
 const send = (res, s, b) => {
@@ -90,6 +91,11 @@ module.exports = async (req, res) => {
     return send(res, 400, {
       error: "Add your desired job title and career goal before checkout.",
     });
+  if (req.body?.instantDeliveryConsent !== true)
+    return send(res, 400, {
+      error:
+        "Confirm the Terms and immediate digital delivery before checkout.",
+    });
   const o = origin(req);
   if (!o) return send(res, 500, { error: "Could not determine app URL." });
   try {
@@ -112,6 +118,9 @@ module.exports = async (req, res) => {
     f.set("metadata[linkedin_url]", profileUrl);
     f.set("metadata[analysis_count]", "0");
     f.set("metadata[analysis_status]", "pending");
+    f.set("metadata[terms_version]", TERMS_VERSION);
+    f.set("metadata[instant_delivery_consent]", "accepted");
+    f.set("metadata[consent_recorded_at]", new Date().toISOString());
     f.set("metadata[desired_job_title]", context.desiredJobTitle);
     f.set("metadata[career_goal]", context.careerGoal);
     if (context.targetLocation)
@@ -120,6 +129,11 @@ module.exports = async (req, res) => {
       f.set("metadata[target_industry]", context.targetIndustry);
     f.set("payment_intent_data[metadata][product]", PRODUCT);
     f.set("payment_intent_data[metadata][linkedin_url]", profileUrl);
+    f.set("payment_intent_data[metadata][terms_version]", TERMS_VERSION);
+    f.set(
+      "custom_text[submit][message]",
+      "Payment starts immediate delivery of your digital profile report under the Terms accepted on the previous page.",
+    );
     const s = await stripe("/v1/checkout/sessions", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },

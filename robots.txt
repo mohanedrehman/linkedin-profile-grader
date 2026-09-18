@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://linkedin-profile-grader-one.vercel.app/sitemap.xml

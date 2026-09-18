@@ -1,5 +1,6 @@
 const assert = require("node:assert/strict");
 const { compact, normaliseReport } = require("../api/analyze")._test;
+const createCheckout = require("../api/create-checkout");
 const {
   normaliseContext,
   signContext,
@@ -91,4 +92,97 @@ assert.equal(
   null,
 );
 
-console.log("analysis tests passed");
+async function testCheckoutConsentValidation() {
+  const makeResponse = () => ({
+    headers: {},
+    setHeader(key, value) {
+      this.headers[key] = value;
+    },
+    end(value) {
+      this.body = JSON.parse(value);
+    },
+  });
+  const response = makeResponse();
+  await createCheckout(
+    {
+      method: "POST",
+      headers: { "content-length": "200", "x-forwarded-for": "test-consent" },
+      socket: {},
+      body: {
+        profileUrl: "https://www.linkedin.com/in/example/",
+        desiredJobTitle: "Cloud Support Engineer",
+        careerGoal: "career-pivot",
+        instantDeliveryConsent: false,
+      },
+    },
+    response,
+  );
+  assert.equal(response.statusCode, 400);
+  assert.match(response.body.error, /immediate digital delivery/i);
+
+  const originalFetch = global.fetch;
+  const originalStripeKey = process.env.STRIPE_SECRET_KEY;
+  process.env.STRIPE_SECRET_KEY = "sk_test_unit_only";
+  let checkoutForm;
+  global.fetch = async (url, options) => {
+    assert.equal(url, "https://api.stripe.com/v1/checkout/sessions");
+    checkoutForm = options.body;
+    return {
+      ok: true,
+      json: async () => ({
+        id: "cs_test_checkout_context",
+        url: "https://checkout.stripe.test/session",
+      }),
+    };
+  };
+  try {
+    const success = makeResponse();
+    await createCheckout(
+      {
+        method: "POST",
+        headers: {
+          host: "localhost:3000",
+          "content-length": "300",
+          "x-forwarded-for": "test-success",
+        },
+        socket: {},
+        body: {
+          profileUrl: "https://www.linkedin.com/in/example/",
+          desiredJobTitle: "Cloud Support Engineer",
+          careerGoal: "career-pivot",
+          instantDeliveryConsent: true,
+        },
+      },
+      success,
+    );
+    assert.equal(success.statusCode, 200);
+    assert.equal(
+      checkoutForm.get("metadata[instant_delivery_consent]"),
+      "accepted",
+    );
+    assert.equal(checkoutForm.get("metadata[terms_version]"), "2026-09-18");
+    assert.match(
+      checkoutForm.get("custom_text[submit][message]"),
+      /immediate delivery/i,
+    );
+    assert.equal(
+      verifyContext(
+        success.body.contextToken,
+        "cs_test_checkout_context",
+        process.env.STRIPE_SECRET_KEY,
+      ).desiredJobTitle,
+      "Cloud Support Engineer",
+    );
+  } finally {
+    global.fetch = originalFetch;
+    if (originalStripeKey === undefined) delete process.env.STRIPE_SECRET_KEY;
+    else process.env.STRIPE_SECRET_KEY = originalStripeKey;
+  }
+}
+
+testCheckoutConsentValidation()
+  .then(() => console.log("analysis tests passed"))
+  .catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });

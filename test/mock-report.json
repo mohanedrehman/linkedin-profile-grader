@@ -1,6 +1,6 @@
 {
   "profile": {
-    "name": "Mohaned Rehman",
+    "name": "Alex Morgan",
     "position": "Legal Administrator",
     "city": "Manchester"
   },
@@ -15,7 +15,7 @@
     "overall_score": 34,
     "verdict": "Credible foundations, but the profile has no clear professional thesis",
     "executive_summary": {
-      "recruiter_read": "The profile shows real legal-administration experience and a Computer Science degree, but it does not yet explain which direction Mohaned wants recruiters to consider him for.",
+      "recruiter_read": "The profile shows real legal-administration experience and a Computer Science degree, but it does not yet explain which direction Alex wants recruiters to consider them for.",
       "strongest_signal": "Current legal-administration experience supported by a completed Computer Science degree.",
       "biggest_risk": "The legal and technical signals compete rather than combine into one deliberate positioning story.",
       "fastest_win": "Choose one target direction and make the headline, About section and first two experience bullets reinforce it."
@@ -170,13 +170,13 @@
       "recommended": "Legal Administrator | Document Control & Data Accuracy | BSc Computer Science",
       "alternatives": [
         "Legal Operations Administrator | Document Control | Systems-Literate BSc Computer Science Graduate",
-        "Legal Administrator at Tuckers Solicitors | Data Entry & Document Control Background"
+        "Legal Administrator at Northstar Services | Data Entry & Document Control Background"
       ],
       "formula": "Target role + two supported specialist strengths + credibility signal",
       "rationale": "This version prioritises the current career evidence while using the degree as differentiation instead of implying unsupported technical experience."
     },
     "about_strategy": {
-      "recommended": "I am a Legal Administrator with earlier experience across data entry, document control and customer-facing work. My background combines day-to-day administrative discipline with a BSc in Computer Science.\n\nIn my current role at Tuckers Solicitors, I support legal-administration workflows where accuracy, organisation and careful handling of information matter. Earlier roles developed my experience working with records, documents and customers across different operating environments.\n\nI am now focused on opportunities where reliable administration, document control and systems awareness are valued. Add verified tools, volumes and outcomes here to make this evidence stronger.",
+      "recommended": "I am a Legal Administrator with earlier experience across data entry, document control and customer-facing work. My background combines day-to-day administrative discipline with a BSc in Computer Science.\n\nIn my current role at Northstar Services, I support legal-administration workflows where accuracy, organisation and careful handling of information matter. Earlier roles developed my experience working with records, documents and customers across different operating environments.\n\nI am now focused on opportunities where reliable administration, document control and systems awareness are valued. Add verified tools, volumes and outcomes here to make this evidence stronger.",
       "opening_hook": "Legal administration backed by document-control experience and systems literacy.",
       "proof_gap_note": "The retrieved data does not show tools, caseload volume, turnaround times or measurable outcomes.",
       "facts_to_collect": [
@@ -189,7 +189,7 @@
     "experience_improvements": [
       {
         "role": "Legal Administrator",
-        "company": "Tuckers Solicitors",
+        "company": "Northstar Services",
         "diagnosis": "The title is relevant, but the retrieved profile does not show the work performed.",
         "improved_bullets": [
           "Maintain accurate legal and client records using [verified systems or tools].",

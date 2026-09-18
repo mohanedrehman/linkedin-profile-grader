@@ -6,8 +6,24 @@
     <title>LinkedIn Profile Grader</title>
     <meta
       name="description"
-      content="Paste your LinkedIn profile URL, pay once, and get a complete recruiter-style audit and rewrite plan."
+      content="Get a target-role LinkedIn audit with recruiter-fit scoring, evidence gaps, copy-ready rewrites, exact keywords and a seven-day action plan."
     />
+    <link
+      rel="canonical"
+      href="https://linkedin-profile-grader-one.vercel.app/"
+    />
+    <meta name="theme-color" content="#0b2454" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LinkedIn Profile Grader" />
+    <meta
+      property="og:description"
+      content="A target-role recruiter audit with evidence-backed scoring and exact profile rewrites."
+    />
+    <meta
+      property="og:url"
+      content="https://linkedin-profile-grader-one.vercel.app/"
+    />
+    <meta name="twitter:card" content="summary" />
     <style>
       :root {
         --bg: #f7faff;
@@ -281,6 +297,25 @@
         margin-top: 14px;
         color: #64748b;
         font-size: 13px;
+      }
+      .consent-row {
+        display: grid;
+        grid-template-columns: 18px 1fr;
+        gap: 10px;
+        align-items: start;
+        margin: 14px 4px;
+        text-align: left;
+        color: #52627a;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .consent-row input {
+        width: 17px;
+        height: 17px;
+        margin: 1px 0 0;
+      }
+      .consent-row a {
+        color: var(--blue);
       }
       .price-note strong {
         color: #111827;
@@ -1006,8 +1041,10 @@
                 <div class="url-icon">in</div>
                 <input
                   id="profileUrl"
+                  type="url"
                   placeholder="Paste your LinkedIn profile URL…"
                   autocomplete="url"
+                  aria-label="LinkedIn profile URL"
                 />
               </div>
               <div class="intake-card">
@@ -1094,9 +1131,19 @@
                   report only; it is not stored in Stripe metadata.
                 </p>
               </div>
-              <div id="error" class="error">
+              <div id="error" class="error" role="status" aria-live="polite">
                 Complete the required fields above.
               </div>
+              <label class="consent-row">
+                <input id="instantConsent" type="checkbox" />
+                <span
+                  >I agree to the <a href="terms.html">Terms</a>, request the
+                  analysis to begin immediately after payment, and understand
+                  that my cancellation right ends once the digital report is
+                  supplied. This does not affect rights if the service is
+                  faulty.</span
+                >
+              </label>
               <button id="gradeBtn" class="cta">
                 Analyse My LinkedIn — £2.99 →
               </button>
@@ -1352,9 +1399,10 @@
         </div>
       </section>
       <footer>
-        <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a
-        ><br /><br />Not affiliated with LinkedIn. LinkedIn is a trademark of
-        LinkedIn Corporation.
+        <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> ·
+        <a href="mailto:muhanedzaeem@gmail.com">Support</a><br /><br />Not
+        affiliated with LinkedIn. LinkedIn is a trademark of LinkedIn
+        Corporation.
       </footer>
     </div>
     <script>
@@ -1377,17 +1425,20 @@
         achievements: $("#achievements").value.trim(),
         tools: $("#tools").value.trim(),
         cvText: $("#cvText").value.trim(),
+        instantDeliveryConsent: $("#instantConsent").checked,
       });
       function saveDraft() {
-        localStorage.setItem(DRAFT_KEY, JSON.stringify(intake()));
+        sessionStorage.setItem(DRAFT_KEY, JSON.stringify(intake()));
       }
       function restoreDraft() {
         try {
-          const draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null");
+          const draft = JSON.parse(sessionStorage.getItem(DRAFT_KEY) || "null");
           if (!draft) return;
           Object.entries(draft).forEach(([key, value]) => {
             const element = document.getElementById(key);
             if (element && typeof value === "string") element.value = value;
+            if (element?.type === "checkbox" && typeof value === "boolean")
+              element.checked = value;
           });
         } catch {}
       }
@@ -1434,6 +1485,12 @@
           error.classList.add("show");
           return careerGoal.focus();
         }
+        if (!$("#instantConsent").checked) {
+          error.textContent =
+            "Confirm the Terms and immediate digital delivery to continue.";
+          error.classList.add("show");
+          return $("#instantConsent").focus();
+        }
         error.classList.remove("show");
         saveDraft();
         const b = $("#gradeBtn"),
@@ -1442,7 +1499,7 @@
         b.textContent = "Opening secure checkout…";
         try {
           const d = await post("/api/create-checkout", intake());
-          localStorage.setItem(
+          sessionStorage.setItem(
             "linkedin-context:" + d.sessionId,
             d.contextToken,
           );
@@ -1469,7 +1526,8 @@
           .querySelectorAll(".input-wrap input, .input-wrap textarea")
           .forEach((element) => (element.value = ""));
         careerGoal.value = "";
-        localStorage.removeItem(DRAFT_KEY);
+        $("#instantConsent").checked = false;
+        sessionStorage.removeItem(DRAFT_KEY);
         results.classList.remove("failed");
         show("landing");
       };
@@ -1528,10 +1586,16 @@
             "--score",
             `${Math.max(0, Math.min(100, Number(r.overall_score) || 0))}%`,
           );
-        $("#verdict").textContent = scoreVerdict(Number(r.overall_score) || 0);
+        $("#verdict").textContent =
+          r.verdict || scoreVerdict(Number(r.overall_score) || 0);
         const summary = r.executive_summary || {};
         $("#recruiterRead").textContent = summary.recruiter_read || "";
-        $("#profileMeta").textContent = [p.name, p.position, p.city]
+        $("#profileMeta").textContent = [
+          p.name,
+          p.position,
+          p.city,
+          brief.desiredJobTitle ? `Target: ${brief.desiredJobTitle}` : "",
+        ]
           .filter(Boolean)
           .join(" · ");
         $("#summaryGrid").innerHTML = [
@@ -1635,12 +1699,12 @@
         }, 750);
         try {
           const tokenKey = "linkedin-context:" + id;
-          const contextToken = localStorage.getItem(tokenKey) || "";
+          const contextToken = sessionStorage.getItem(tokenKey) || "";
           const d = await post("/api/analyze", { sessionId: id, contextToken });
           clearInterval(timer);
           localStorage.setItem(key, JSON.stringify(d));
-          localStorage.removeItem(tokenKey);
-          localStorage.removeItem(DRAFT_KEY);
+          sessionStorage.removeItem(tokenKey);
+          sessionStorage.removeItem(DRAFT_KEY);
           render(d);
           const u = new URL(location.href);
           u.search = "";
@@ -1657,6 +1721,23 @@
       (() => {
         restoreDraft();
         const q = new URLSearchParams(location.search);
+        if (
+          q.get("preview") === "mock" &&
+          ["localhost", "127.0.0.1"].includes(location.hostname)
+        ) {
+          show("loading");
+          fetch("/test/mock-report.json")
+            .then((response) => response.json())
+            .then(render)
+            .catch((previewError) => {
+              show("results");
+              results.classList.add("failed");
+              const box = $("#resultError");
+              box.textContent = previewError.message;
+              box.style.display = "block";
+            });
+          return;
+        }
         if (q.get("cancelled") === "1") {
           $("#cancelNote").style.display = "block";
           return show("landing");

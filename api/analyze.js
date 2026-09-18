@@ -6,6 +6,7 @@ const PRODUCT = "linkedin-profile-grader-v1";
 const MAX_ATTEMPTS = 2;
 const DEFAULT_APIFY_ACTOR = "apimaestro~linkedin-profile-detail";
 const REPORT_VERSION = "3.0";
+const TERMS_VERSION = "2026-09-18";
 
 const send = (res, status, body) => {
   res.statusCode = status;
@@ -748,6 +749,13 @@ async function handler(req, res) {
     )
       return send(res, 403, {
         error: "This payment is not valid for this report.",
+      });
+    if (
+      checkoutSession.metadata?.instant_delivery_consent !== "accepted" ||
+      checkoutSession.metadata?.terms_version !== TERMS_VERSION
+    )
+      return send(res, 403, {
+        error: "This checkout is missing the required delivery consent.",
       });
     const url = checkoutSession.metadata?.linkedin_url;
     if (!url)
