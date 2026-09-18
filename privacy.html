@@ -1,1 +1,63 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Privacy – LinkedIn Profile Grader</title><style>body{font-family:system-ui,sans-serif;max-width:760px;margin:60px auto;padding:0 20px;line-height:1.65;color:#111827}a{color:#2455ff}h1,h2{letter-spacing:-.03em}</style></head><body><a href="/">← Back</a><h1>Privacy</h1><p>This service accepts a public LinkedIn profile URL after payment, uses Bright Data to retrieve publicly visible profile information, and sends relevant profile data to OpenAI to generate the report.</p><h2>What we process</h2><p>The LinkedIn profile URL, publicly available profile information returned by Bright Data, Stripe payment/session identifiers, and the generated report.</p><h2>Payments</h2><p>Payments are handled by Stripe. We do not receive or store full card details.</p><h2>AI processing</h2><p>Profile data is sent to OpenAI to generate the report. The application requests <code>store:false</code> for API responses.</p><h2>Local storage</h2><p>Your browser stores the completed report locally so refreshing the page does not trigger another analysis.</p><h2>Contact</h2><p>A support/contact address will be added before public launch.</p></body></html>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Privacy – LinkedIn Profile Grader</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 760px;
+        margin: 60px auto;
+        padding: 0 20px;
+        line-height: 1.65;
+        color: #111827;
+      }
+      a {
+        color: #2455ff;
+      }
+      h1,
+      h2 {
+        letter-spacing: -0.03em;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/">← Back</a>
+    <h1>Privacy</h1>
+    <p>
+      This service accepts a public LinkedIn profile URL and a target-role
+      brief, uses Apify to retrieve publicly visible profile information, and
+      sends the relevant information to OpenAI to generate the report after
+      payment.
+    </p>
+    <h2>What we process</h2>
+    <p>
+      We process the LinkedIn profile URL, the desired role and career goal,
+      optional location and industry, any achievements, tools or CV text you
+      choose to provide, publicly available profile information returned by
+      Apify, Stripe payment/session identifiers, and the generated report.
+    </p>
+    <h2>Payments</h2>
+    <p>
+      Payments are handled by Stripe. We do not receive or store full card
+      details. Long-form achievements and CV text are not placed in Stripe
+      metadata.
+    </p>
+    <h2>AI processing</h2>
+    <p>
+      Retrieved profile data and the target-role brief are sent to OpenAI to
+      generate the report. The application requests <code>store:false</code> for
+      API responses.
+    </p>
+    <h2>Local storage</h2>
+    <p>
+      Your browser temporarily stores the intake draft and signed target-role
+      brief through checkout, then stores the completed report locally so
+      refreshing the page does not trigger another analysis. The signed brief
+      and draft are removed after a successful report.
+    </p>
+    <h2>Contact</h2>
+    <p>A support/contact address will be added before public launch.</p>
+  </body>
+</html>

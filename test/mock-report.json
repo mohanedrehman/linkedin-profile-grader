@@ -4,8 +4,14 @@
     "position": "Legal Administrator",
     "city": "Manchester"
   },
+  "target": {
+    "desiredJobTitle": "Legal Operations Analyst",
+    "careerGoal": "career-pivot",
+    "targetLocation": "Manchester or Remote",
+    "targetIndustry": "Legal technology"
+  },
   "report": {
-    "report_version": "2.0",
+    "report_version": "3.0",
     "overall_score": 34,
     "verdict": "Credible foundations, but the profile has no clear professional thesis",
     "executive_summary": {
@@ -18,33 +24,154 @@
       "inferred_path": "Legal operations / legal administration with strong systems literacy",
       "confidence": "medium",
       "ambiguity": "The current role supports a legal-operations path, while the degree suggests a possible technology path. The retrieved data does not state which one is the target.",
-      "evidence": ["Current Legal Administrator role", "BSc Computer Science", "Earlier document-control and data-entry experience"]
+      "evidence": [
+        "Current Legal Administrator role",
+        "BSc Computer Science",
+        "Earlier document-control and data-entry experience"
+      ]
     },
+    "recruiter_fit": {
+      "fit_score": 46,
+      "fit_level": "partial",
+      "assessment": "The profile has a credible legal-administration and systems foundation, but it does not yet demonstrate legal-operations analysis, process improvement or tooling strongly enough for a confident shortlist.",
+      "strongest_matches": [
+        "Current legal-administration experience",
+        "Document-control background",
+        "Computer Science degree"
+      ],
+      "hiring_risks": [
+        "No visible process-improvement evidence",
+        "No confirmed legal-technology tools",
+        "Target role is not stated publicly"
+      ],
+      "recruiter_decision": "Possible screening call for an entry-level role, but stronger evidence is needed for a competitive shortlist."
+    },
+    "gap_analysis": [
+      {
+        "gap": "Target role is not visible",
+        "current_evidence": "The profile currently leads with Legal Administrator.",
+        "why_it_matters": "Recruiters may not connect the background to legal operations.",
+        "exact_fix": "State Legal Operations Analyst as the target and connect it to verified administration, document and systems evidence.",
+        "priority": "critical"
+      },
+      {
+        "gap": "Process improvement is not demonstrated",
+        "current_evidence": "No workflow outcomes were retrieved.",
+        "why_it_matters": "Analyst roles require evidence of improving or measuring operations.",
+        "exact_fix": "Add one verified workflow problem, action and result to the current role.",
+        "priority": "high"
+      },
+      {
+        "gap": "Tool evidence is thin",
+        "current_evidence": "A Computer Science degree is visible, but no current tools were retrieved.",
+        "why_it_matters": "Recruiters need proof of hands-on systems use.",
+        "exact_fix": "List only the case-management, reporting and productivity tools used in real work.",
+        "priority": "high"
+      }
+    ],
     "scores": {
-      "positioning": { "score": 28, "diagnosis": "Two credible directions are visible, but neither is declared as the target.", "evidence": ["Legal Administrator role", "Computer Science degree"], "next_step": "Choose the target role family and make it explicit above the fold." },
-      "headline": { "score": 20, "diagnosis": "The retrieved data does not show a differentiated, keyword-rich headline.", "evidence": ["Only a current role title was retrieved"], "next_step": "Use role + domain + evidence-backed strengths." },
-      "about": { "score": 15, "diagnosis": "No About narrative was present in the retrieved data.", "evidence": ["About field was empty"], "next_step": "Publish a concise story that connects the legal and systems evidence." },
-      "experience": { "score": 38, "diagnosis": "The timeline is credible, but scope and outcomes are not visible.", "evidence": ["Multiple employers and roles", "No detailed role evidence retrieved"], "next_step": "Add action-led bullets with verified volume, tools and outcomes." },
-      "credibility": { "score": 58, "diagnosis": "A degree and continuous work history create a useful base.", "evidence": ["BSc Computer Science", "Current employment"], "next_step": "Surface relevant projects, certifications and proof of responsibility." },
-      "searchability": { "score": 25, "diagnosis": "The profile contains role names but too few supported specialist terms.", "evidence": ["Legal Administrator", "Document Controller"], "next_step": "Repeat supported terms naturally across headline, About and experience." }
+      "positioning": {
+        "score": 28,
+        "diagnosis": "Two credible directions are visible, but neither is declared as the target.",
+        "evidence": ["Legal Administrator role", "Computer Science degree"],
+        "next_step": "Choose the target role family and make it explicit above the fold."
+      },
+      "headline": {
+        "score": 20,
+        "diagnosis": "The retrieved data does not show a differentiated, keyword-rich headline.",
+        "evidence": ["Only a current role title was retrieved"],
+        "next_step": "Use role + domain + evidence-backed strengths."
+      },
+      "about": {
+        "score": 15,
+        "diagnosis": "No About narrative was present in the retrieved data.",
+        "evidence": ["About field was empty"],
+        "next_step": "Publish a concise story that connects the legal and systems evidence."
+      },
+      "experience": {
+        "score": 38,
+        "diagnosis": "The timeline is credible, but scope and outcomes are not visible.",
+        "evidence": [
+          "Multiple employers and roles",
+          "No detailed role evidence retrieved"
+        ],
+        "next_step": "Add action-led bullets with verified volume, tools and outcomes."
+      },
+      "credibility": {
+        "score": 58,
+        "diagnosis": "A degree and continuous work history create a useful base.",
+        "evidence": ["BSc Computer Science", "Current employment"],
+        "next_step": "Surface relevant projects, certifications and proof of responsibility."
+      },
+      "searchability": {
+        "score": 25,
+        "diagnosis": "The profile contains role names but too few supported specialist terms.",
+        "evidence": ["Legal Administrator", "Document Controller"],
+        "next_step": "Repeat supported terms naturally across headline, About and experience."
+      }
     },
     "content_inventory": {
-      "present": ["Current role", "Employment history", "Degree", "Company names", "Date ranges"],
-      "missing_or_not_retrieved": ["About section", "Detailed role bullets", "Skills", "Certifications", "Projects", "Measurable outcomes"],
+      "present": [
+        "Current role",
+        "Employment history",
+        "Degree",
+        "Company names",
+        "Date ranges"
+      ],
+      "missing_or_not_retrieved": [
+        "About section",
+        "Detailed role bullets",
+        "Skills",
+        "Certifications",
+        "Projects",
+        "Measurable outcomes"
+      ],
       "data_quality_note": "This audit scores only the public information returned by the profile-data provider. A section listed here may exist on LinkedIn but have been unavailable publicly."
     },
     "top_problems": [
-      { "rank": 1, "severity": "high", "problem": "The target direction is unclear", "evidence": "The current legal role and Computer Science degree point to different recruiter searches.", "why_it_costs_opportunities": "A recruiter cannot quickly decide which vacancy the profile is designed to match.", "exact_fix": "Select one primary direction and use the second background as supporting differentiation." },
-      { "rank": 2, "severity": "high", "problem": "Experience is not evidenced", "evidence": "Role titles and employers are visible, but responsibilities, tools, scale and outcomes were not retrieved.", "why_it_costs_opportunities": "Titles alone do not prove capability or level of ownership.", "exact_fix": "Add two to four factual bullets per role using action + scope + tool + verified result." },
-      { "rank": 3, "severity": "medium", "problem": "Search terms are too thin", "evidence": "Few skill or specialist keywords were returned.", "why_it_costs_opportunities": "The profile is less likely to match recruiter keyword searches.", "exact_fix": "Use only supported terms across the headline, About section and relevant experience bullets." }
+      {
+        "rank": 1,
+        "severity": "high",
+        "problem": "The target direction is unclear",
+        "evidence": "The current legal role and Computer Science degree point to different recruiter searches.",
+        "why_it_costs_opportunities": "A recruiter cannot quickly decide which vacancy the profile is designed to match.",
+        "exact_fix": "Select one primary direction and use the second background as supporting differentiation."
+      },
+      {
+        "rank": 2,
+        "severity": "high",
+        "problem": "Experience is not evidenced",
+        "evidence": "Role titles and employers are visible, but responsibilities, tools, scale and outcomes were not retrieved.",
+        "why_it_costs_opportunities": "Titles alone do not prove capability or level of ownership.",
+        "exact_fix": "Add two to four factual bullets per role using action + scope + tool + verified result."
+      },
+      {
+        "rank": 3,
+        "severity": "medium",
+        "problem": "Search terms are too thin",
+        "evidence": "Few skill or specialist keywords were returned.",
+        "why_it_costs_opportunities": "The profile is less likely to match recruiter keyword searches.",
+        "exact_fix": "Use only supported terms across the headline, About section and relevant experience bullets."
+      }
     ],
     "strengths": [
-      { "strength": "Cross-functional background", "evidence": "Legal administration, document control, data entry and Computer Science education.", "how_to_leverage": "Position this as operational accuracy plus systems literacy." },
-      { "strength": "Current professional experience", "evidence": "A current Legal Administrator role is visible.", "how_to_leverage": "Lead with present responsibilities and verified scope rather than older roles." }
+      {
+        "strength": "Cross-functional background",
+        "evidence": "Legal administration, document control, data entry and Computer Science education.",
+        "how_to_leverage": "Position this as operational accuracy plus systems literacy."
+      },
+      {
+        "strength": "Current professional experience",
+        "evidence": "A current Legal Administrator role is visible.",
+        "how_to_leverage": "Lead with present responsibilities and verified scope rather than older roles."
+      }
     ],
     "headline_strategy": {
       "recommended": "Legal Administrator | Document Control & Data Accuracy | BSc Computer Science",
-      "alternatives": ["Legal Operations Administrator | Document Control | Systems-Literate BSc Computer Science Graduate", "Legal Administrator at Tuckers Solicitors | Data Entry & Document Control Background"],
+      "alternatives": [
+        "Legal Operations Administrator | Document Control | Systems-Literate BSc Computer Science Graduate",
+        "Legal Administrator at Tuckers Solicitors | Data Entry & Document Control Background"
+      ],
       "formula": "Target role + two supported specialist strengths + credibility signal",
       "rationale": "This version prioritises the current career evidence while using the degree as differentiation instead of implying unsupported technical experience."
     },
@@ -52,23 +179,121 @@
       "recommended": "I am a Legal Administrator with earlier experience across data entry, document control and customer-facing work. My background combines day-to-day administrative discipline with a BSc in Computer Science.\n\nIn my current role at Tuckers Solicitors, I support legal-administration workflows where accuracy, organisation and careful handling of information matter. Earlier roles developed my experience working with records, documents and customers across different operating environments.\n\nI am now focused on opportunities where reliable administration, document control and systems awareness are valued. Add verified tools, volumes and outcomes here to make this evidence stronger.",
       "opening_hook": "Legal administration backed by document-control experience and systems literacy.",
       "proof_gap_note": "The retrieved data does not show tools, caseload volume, turnaround times or measurable outcomes.",
-      "facts_to_collect": ["Which case-management or document systems do you use?", "What volume of records or matters do you handle?", "Which processes do you own independently?", "What errors, delays or rework have you reduced?"]
+      "facts_to_collect": [
+        "Which case-management or document systems do you use?",
+        "What volume of records or matters do you handle?",
+        "Which processes do you own independently?",
+        "What errors, delays or rework have you reduced?"
+      ]
     },
     "experience_improvements": [
-      { "role": "Legal Administrator", "company": "Tuckers Solicitors", "diagnosis": "The title is relevant, but the retrieved profile does not show the work performed.", "improved_bullets": ["Maintain accurate legal and client records using [verified systems or tools].", "Coordinate [verified workflow] across [verified teams or stakeholders] to support timely case administration.", "Process approximately [verified volume] documents or matters per [week/month] while following confidentiality requirements."], "questions_to_unlock_stronger_bullets": ["Which systems do you use every week?", "How many matters or documents do you handle?", "Who depends on your work?", "What changed because of your contribution?"] }
+      {
+        "role": "Legal Administrator",
+        "company": "Tuckers Solicitors",
+        "diagnosis": "The title is relevant, but the retrieved profile does not show the work performed.",
+        "improved_bullets": [
+          "Maintain accurate legal and client records using [verified systems or tools].",
+          "Coordinate [verified workflow] across [verified teams or stakeholders] to support timely case administration.",
+          "Process approximately [verified volume] documents or matters per [week/month] while following confidentiality requirements."
+        ],
+        "questions_to_unlock_stronger_bullets": [
+          "Which systems do you use every week?",
+          "How many matters or documents do you handle?",
+          "Who depends on your work?",
+          "What changed because of your contribution?"
+        ]
+      }
     ],
     "keyword_strategy": {
-      "primary": ["Legal Administrator", "Legal Operations", "Document Control", "Data Accuracy"],
-      "secondary": ["Data Entry", "Records Management", "Administrative Support", "Computer Science"],
-      "recruiter_search_phrases": ["legal administrator document control", "legal operations administrator data accuracy"],
+      "primary": [
+        "Legal Administrator",
+        "Legal Operations",
+        "Document Control",
+        "Data Accuracy"
+      ],
+      "secondary": [
+        "Data Entry",
+        "Records Management",
+        "Administrative Support",
+        "Computer Science"
+      ],
+      "recruiter_search_phrases": [
+        "legal administrator document control",
+        "legal operations administrator data accuracy"
+      ],
       "caution": "Do not add legal technologies or technical skills until they are confirmed by real experience."
     },
-    "priority_actions": [
-      { "priority": 1, "action": "Choose the primary target role family", "why": "Every other section depends on one clear direction.", "impact": "high", "effort": "low", "estimated_minutes": 15 },
-      { "priority": 2, "action": "Replace the headline", "why": "It is the highest-visibility search and positioning field.", "impact": "high", "effort": "low", "estimated_minutes": 10 },
-      { "priority": 3, "action": "Publish the About rewrite after verifying details", "why": "It converts a mixed background into a coherent story.", "impact": "high", "effort": "medium", "estimated_minutes": 35 },
-      { "priority": 4, "action": "Add evidence-led bullets to the current role", "why": "Recruiters need proof of scope and ownership.", "impact": "high", "effort": "medium", "estimated_minutes": 45 },
-      { "priority": 5, "action": "Complete supported skills and projects", "why": "This improves credibility and keyword coverage.", "impact": "medium", "effort": "medium", "estimated_minutes": 30 }
+    "seven_day_plan": [
+      {
+        "day": 1,
+        "focus": "Confirm the target",
+        "tasks": [
+          "Choose the exact role title",
+          "Save three representative job descriptions"
+        ],
+        "outcome": "One clear role target and evidence benchmark.",
+        "estimated_minutes": 30
+      },
+      {
+        "day": 2,
+        "focus": "Collect proof",
+        "tasks": [
+          "List tools genuinely used",
+          "Capture verified workflow volumes and outcomes"
+        ],
+        "outcome": "A factual evidence bank for the rewrite.",
+        "estimated_minutes": 45
+      },
+      {
+        "day": 3,
+        "focus": "Replace the headline",
+        "tasks": [
+          "Verify every term in the recommended headline",
+          "Publish the strongest supported version"
+        ],
+        "outcome": "A target-aligned first impression.",
+        "estimated_minutes": 20
+      },
+      {
+        "day": 4,
+        "focus": "Rewrite About",
+        "tasks": [
+          "Fill any bracketed proof gaps",
+          "Publish the concise About version"
+        ],
+        "outcome": "A coherent target-role narrative.",
+        "estimated_minutes": 40
+      },
+      {
+        "day": 5,
+        "focus": "Strengthen experience",
+        "tasks": [
+          "Rewrite the current role first",
+          "Add two evidence-led bullets to the next relevant role"
+        ],
+        "outcome": "Visible proof of scope and transferable value.",
+        "estimated_minutes": 60
+      },
+      {
+        "day": 6,
+        "focus": "Improve searchability",
+        "tasks": [
+          "Add supported primary keywords",
+          "Remove unsupported or distracting terms"
+        ],
+        "outcome": "Better alignment with honest recruiter searches.",
+        "estimated_minutes": 30
+      },
+      {
+        "day": 7,
+        "focus": "Run the recruiter scan",
+        "tasks": [
+          "Review the top section in ten seconds",
+          "Compare the profile with the saved job descriptions"
+        ],
+        "outcome": "A consistent and defensible target-role profile.",
+        "estimated_minutes": 30
+      }
     ]
   }
 }

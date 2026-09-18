@@ -1,10 +1,11 @@
 const crypto = require("node:crypto");
+const { normaliseContext, verifyContext } = require("../lib/context-token");
 
 const PRICE = 299;
 const PRODUCT = "linkedin-profile-grader-v1";
 const MAX_ATTEMPTS = 2;
 const DEFAULT_APIFY_ACTOR = "apimaestro~linkedin-profile-detail";
-const REPORT_VERSION = "2.0";
+const REPORT_VERSION = "3.0";
 
 const send = (res, status, body) => {
   res.statusCode = status;
@@ -350,6 +351,62 @@ const reportSchema = {
       },
       required: ["inferred_path", "confidence", "ambiguity", "evidence"],
     },
+    recruiter_fit: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        fit_score: { type: "integer", minimum: 0, maximum: 100 },
+        fit_level: {
+          type: "string",
+          enum: ["weak", "partial", "credible", "strong"],
+        },
+        assessment: { type: "string" },
+        strongest_matches: {
+          type: "array",
+          minItems: 2,
+          maxItems: 5,
+          items: { type: "string" },
+        },
+        hiring_risks: {
+          type: "array",
+          minItems: 2,
+          maxItems: 5,
+          items: { type: "string" },
+        },
+        recruiter_decision: { type: "string" },
+      },
+      required: [
+        "fit_score",
+        "fit_level",
+        "assessment",
+        "strongest_matches",
+        "hiring_risks",
+        "recruiter_decision",
+      ],
+    },
+    gap_analysis: {
+      type: "array",
+      minItems: 3,
+      maxItems: 6,
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          gap: { type: "string" },
+          current_evidence: { type: "string" },
+          why_it_matters: { type: "string" },
+          exact_fix: { type: "string" },
+          priority: { type: "string", enum: ["critical", "high", "medium"] },
+        },
+        required: [
+          "gap",
+          "current_evidence",
+          "why_it_matters",
+          "exact_fix",
+          "priority",
+        ],
+      },
+    },
     scores: {
       type: "object",
       additionalProperties: false,
@@ -515,29 +572,26 @@ const reportSchema = {
       },
       required: ["primary", "secondary", "recruiter_search_phrases", "caution"],
     },
-    priority_actions: {
+    seven_day_plan: {
       type: "array",
-      minItems: 5,
+      minItems: 7,
       maxItems: 7,
       items: {
         type: "object",
         additionalProperties: false,
         properties: {
-          priority: { type: "integer", minimum: 1, maximum: 7 },
-          action: { type: "string" },
-          why: { type: "string" },
-          impact: { type: "string", enum: ["high", "medium", "low"] },
-          effort: { type: "string", enum: ["low", "medium", "high"] },
-          estimated_minutes: { type: "integer", minimum: 5, maximum: 240 },
+          day: { type: "integer", minimum: 1, maximum: 7 },
+          focus: { type: "string" },
+          tasks: {
+            type: "array",
+            minItems: 2,
+            maxItems: 4,
+            items: { type: "string" },
+          },
+          outcome: { type: "string" },
+          estimated_minutes: { type: "integer", minimum: 10, maximum: 180 },
         },
-        required: [
-          "priority",
-          "action",
-          "why",
-          "impact",
-          "effort",
-          "estimated_minutes",
-        ],
+        required: ["day", "focus", "tasks", "outcome", "estimated_minutes"],
       },
     },
   },
@@ -546,6 +600,8 @@ const reportSchema = {
     "verdict",
     "executive_summary",
     "target_alignment",
+    "recruiter_fit",
+    "gap_analysis",
     "scores",
     "content_inventory",
     "top_problems",
@@ -554,7 +610,7 @@ const reportSchema = {
     "about_strategy",
     "experience_improvements",
     "keyword_strategy",
-    "priority_actions",
+    "seven_day_plan",
   ],
 };
 
@@ -578,6 +634,12 @@ function normaliseReport(report) {
     },
     0,
   );
+  if (report?.recruiter_fit) {
+    report.recruiter_fit.fit_score = Math.max(
+      0,
+      Math.min(100, Number(report.recruiter_fit.fit_score) || 0),
+    );
+  }
   return {
     ...report,
     report_version: REPORT_VERSION,
@@ -585,31 +647,37 @@ function normaliseReport(report) {
   };
 }
 
-async function buildReport(rawProfile) {
+async function buildReport(rawProfile, rawContext) {
   const key = process.env.OPENAI_API_KEY;
   if (!key) throw new Error("OpenAI is not configured yet.");
   const model = process.env.OPENAI_MODEL || "gpt-5.6-terra";
   const profile = compact(rawProfile);
+  const context = normaliseContext(rawContext);
   const system = `You are a senior LinkedIn positioning strategist and recruiter. Produce a paid-quality, evidence-led audit from the supplied public profile data.
 
 NON-NEGOTIABLE FACT RULES
-- Use only supplied profile data. Never invent employers, dates, degrees, skills, tools, duties, achievements, metrics, clients, certifications, projects, languages or outcomes.
+- Use only supplied public profile evidence and user-provided target context. Never invent employers, dates, degrees, skills, tools, duties, achievements, metrics, clients, certifications, projects, languages or outcomes.
+- Treat the desired role as an aspiration, never as proof that the person has that role or its skills.
+- Distinguish retrieved public-profile evidence from user-provided CV, achievement and tool evidence. Never imply user-provided evidence is already visible on LinkedIn.
+- When evidence is missing, say "not demonstrated in the supplied evidence" rather than claiming the person lacks the skill.
 - Distinguish confirmed facts, reasonable interpretation and missing evidence. Never claim that data absent from the scrape is definitely absent from LinkedIn; say "not present in the retrieved public data".
 - Copy-ready rewrites must remain factual. Where stronger proof is needed, use a natural bracketed prompt such as [add verified volume, outcome or tool] rather than fabricating it.
-- Suggested keywords and recruiter searches must be supported by the profile. Do not smuggle in aspirational skills.
+- Suggested keywords must be supported by supplied evidence. Put desirable but unsupported terms in the caution or proof-gap guidance, never in copy-ready claims.
 
 ANALYSIS STANDARD
 - Keep verdict to one decisive sentence of 6–12 words. It is a report headline, not a summary paragraph.
 - Diagnose the profile as a recruiter would in a 10-second first scan and a 60-second deeper scan.
-- If career direction is ambiguous, make that the central positioning diagnosis. Infer only the path most supported by current evidence and explain the ambiguity.
+- Assess recruiter fit and gaps specifically against the desired job title, career goal, location and industry.
+- If career direction is ambiguous, compare the current public signal with the stated target and explain the mismatch.
 - Make every recommendation specific: cite the signal, explain the opportunity cost and give an exact fix.
-- Headline alternatives should serve distinct evidence-supported positioning angles, not superficial wording variants.
+- Headline alternatives should serve distinct target-role positioning angles while remaining evidence-supported, not superficial wording variants.
 - About copy should be concise, human and skimmable, with no hype or generic adjectives.
-- Experience bullets must be action-led and truthful. Use bracketed evidence prompts only where necessary.
+- Experience bullets must be action-led, truthful and relevant to the target role. Use bracketed evidence prompts only where necessary.
+- Return an exact seven-day plan with days 1 through 7 once each, ordered by dependency and impact.
 
 SCORING RUBRIC
 - 0-20: absent or unusable; 21-40: materially weak; 41-60: serviceable but generic; 61-80: strong and specific; 81-100: exceptional, differentiated and evidence-rich.
-- Positioning measures clarity of target and value proposition.
+- Positioning measures clarity and credibility for the stated target role and value proposition.
 - Headline measures role clarity, differentiation and supported search terms.
 - About measures narrative, proof and recruiter readability.
 - Experience measures specificity, scope, outcomes and progression.
@@ -634,13 +702,13 @@ Write compact, high-information prose. The customer paid for decisions, examples
         { role: "system", content: system },
         {
           role: "user",
-          content: `Audit this retrieved public LinkedIn profile. Treat nulls and empty arrays as "not present in the retrieved data," not proof that the LinkedIn profile itself is empty.\n\n${JSON.stringify(profile).slice(0, 70000)}`,
+          content: `TARGET ROLE BRIEF (user supplied; aspiration and supporting context, not automatically public LinkedIn evidence):\n${JSON.stringify(context)}\n\nRETRIEVED PUBLIC LINKEDIN PROFILE (treat nulls and empty arrays as "not present in the retrieved data," not proof that the profile itself is empty):\n${JSON.stringify(profile).slice(0, 70000)}`,
         },
       ],
       text: {
         format: {
           type: "json_schema",
-          name: "linkedin_profile_report_v2",
+          name: "linkedin_profile_report_v3",
           strict: true,
           schema: reportSchema,
         },
@@ -661,7 +729,7 @@ Write compact, high-information prose. The customer paid for decisions, examples
 async function handler(req, res) {
   if (req.method !== "POST")
     return send(res, 405, { error: "Method not allowed." });
-  if (Number(req.headers["content-length"] || 0) > 10000)
+  if (Number(req.headers["content-length"] || 0) > 20000)
     return send(res, 413, { error: "Request too large." });
   const id = String(req.body?.sessionId || "").trim();
   if (!/^cs_(test|live)_[A-Za-z0-9_]+$/.test(id))
@@ -684,6 +752,27 @@ async function handler(req, res) {
     const url = checkoutSession.metadata?.linkedin_url;
     if (!url)
       return send(res, 400, { error: "Checkout is missing the LinkedIn URL." });
+    const contextToken = String(req.body?.contextToken || "");
+    const signingSecret =
+      process.env.CONTEXT_SIGNING_SECRET || process.env.STRIPE_SECRET_KEY;
+    let context = contextToken
+      ? verifyContext(contextToken, id, signingSecret)
+      : normaliseContext({
+          desiredJobTitle: checkoutSession.metadata?.desired_job_title,
+          careerGoal: checkoutSession.metadata?.career_goal,
+          targetLocation: checkoutSession.metadata?.target_location,
+          targetIndustry: checkoutSession.metadata?.target_industry,
+        });
+    if (contextToken && !context)
+      return send(res, 400, {
+        error:
+          "Your target-role brief is invalid or expired. Please start again.",
+      });
+    if (!context?.desiredJobTitle || !context?.careerGoal)
+      return send(res, 400, {
+        error:
+          "This checkout is missing the target-role brief. Please start again.",
+      });
     if (checkoutSession.metadata?.analysis_status === "refunded")
       return send(res, 410, { error: "This payment was refunded." });
     previousAttempts =
@@ -726,7 +815,7 @@ async function handler(req, res) {
       }
       throw error;
     }
-    const report = await buildReport(rawProfile);
+    const report = await buildReport(rawProfile, context);
     const profile = compact(rawProfile);
     await updateMetadata(id, {
       analysis_status: "complete",
@@ -739,6 +828,12 @@ async function handler(req, res) {
         name: profile.name,
         position: profile.headline,
         city: profile.location,
+      },
+      target: {
+        desiredJobTitle: context.desiredJobTitle,
+        careerGoal: context.careerGoal,
+        targetLocation: context.targetLocation,
+        targetIndustry: context.targetIndustry,
       },
       report,
     });
@@ -762,4 +857,10 @@ async function handler(req, res) {
 }
 
 module.exports = handler;
-module.exports._test = { compact, normaliseReport, reportSchema };
+module.exports._test = {
+  compact,
+  normaliseReport,
+  normaliseContext,
+  reportSchema,
+  verifyContext,
+};

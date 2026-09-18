@@ -1,5 +1,11 @@
 const assert = require("node:assert/strict");
 const { compact, normaliseReport } = require("../api/analyze")._test;
+const {
+  normaliseContext,
+  signContext,
+  verifyContext,
+} = require("../lib/context-token");
+const mock = require("./mock-report.json");
 
 const compacted = compact({
   fullName: "Example Person",
@@ -42,9 +48,47 @@ const dimensions = Object.fromEntries(
     "searchability",
   ].map((key) => [key, { score: key === "positioning" ? 200 : 50 }]),
 );
-const report = normaliseReport({ scores: dimensions });
+const report = normaliseReport({
+  scores: dimensions,
+  recruiter_fit: { fit_score: 130 },
+});
 assert.equal(report.scores.positioning.score, 100);
 assert.equal(report.overall_score, 60);
-assert.equal(report.report_version, "2.0");
+assert.equal(report.recruiter_fit.fit_score, 100);
+assert.equal(report.report_version, "3.0");
+
+const context = normaliseContext({
+  desiredJobTitle: "  Cloud Support Engineer  ",
+  careerGoal: "career-pivot",
+  targetLocation: "London",
+  achievements: "A".repeat(3000),
+});
+assert.equal(context.desiredJobTitle, "Cloud Support Engineer");
+assert.equal(context.achievements.length, 2500);
+
+const secret = "local-test-secret";
+const token = signContext("cs_test_example", context, secret, 1_000_000);
+assert.deepEqual(
+  verifyContext(token, "cs_test_example", secret, 1_000_001),
+  context,
+);
+assert.equal(verifyContext(token, "cs_test_other", secret, 1_000_001), null);
+assert.equal(
+  verifyContext(`${token.slice(0, -1)}x`, "cs_test_example", secret, 1_000_001),
+  null,
+);
+
+assert.equal(mock.report.report_version, "3.0");
+assert.equal(mock.report.seven_day_plan.length, 7);
+assert.equal(mock.report.recruiter_fit.fit_level, "partial");
+assert.equal(
+  verifyContext(
+    token,
+    "cs_test_example",
+    secret,
+    1_000_000 + 8 * 24 * 60 * 60 * 1000,
+  ),
+  null,
+);
 
 console.log("analysis tests passed");

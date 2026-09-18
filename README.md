@@ -4,11 +4,11 @@ A paid-first LinkedIn profile audit MVP.
 
 ## Customer flow
 
-1. Customer pastes a public `linkedin.com/in/...` profile URL.
-2. The app opens a £2.99 Stripe Checkout Session.
+1. Customer pastes a public `linkedin.com/in/...` profile URL and defines their desired role, career goal, market, and optional supporting evidence/CV text.
+2. The app signs that target brief to the new £2.99 Stripe Checkout Session. Only the small non-sensitive target fields are copied into Stripe metadata; long-form evidence remains in the browser-held signed token.
 3. After payment, `/api/analyze` verifies the Checkout Session server-side.
 4. An Apify public-profile Actor retrieves the public profile data.
-5. OpenAI generates a strict structured report from that data.
+5. OpenAI compares the retrieved profile and supplied evidence with the desired role, then generates a strict structured report.
 6. The completed report is cached in the customer's browser so normal reloads do not regenerate it.
 
 There is **no free scraper or OpenAI call before payment**.
@@ -30,6 +30,7 @@ Add these in Vercel. Never commit them to GitHub.
 STRIPE_SECRET_KEY=sk_test_...       # test mode until end-to-end testing is complete
 APIFY_TOKEN=...
 OPENAI_API_KEY=...
+CONTEXT_SIGNING_SECRET=...          # long random secret recommended
 ```
 
 Optional:
@@ -39,13 +40,15 @@ OPENAI_MODEL=gpt-5.6-terra
 APP_ORIGIN=https://your-domain.example
 ```
 
-If `APP_ORIGIN` is omitted, the functions use Vercel's deployment hostname.
+If `APP_ORIGIN` is omitted, the functions use Vercel's deployment hostname. If `CONTEXT_SIGNING_SECRET` is omitted, the server falls back to `STRIPE_SECRET_KEY`; a dedicated secret is preferable for key separation.
 
 ## Abuse controls
 
 - No Apify or OpenAI call before verified payment.
 - Only `https://linkedin.com/in/...` profile URLs are accepted.
 - The paid profile URL is stored in Stripe Checkout metadata and cannot be swapped after payment.
+- The full target-role brief is HMAC-signed to its Checkout Session, expires after seven days, and is rejected if altered or replayed against another session.
+- CV text and long-form evidence are not placed in Stripe metadata.
 - The analysis endpoint validates product, amount (£2.99), currency (GBP), and `payment_status=paid`.
 - A paid Checkout Session is limited to two analysis attempts, allowing one retry without enabling unlimited API abuse.
 - A lightweight checkout rate limit reduces session-spam noise.
@@ -54,7 +57,7 @@ If `APP_ORIGIN` is omitted, the functions use Vercel's deployment hostname.
 - If Apify cannot retrieve usable public profile data after an internal retry, the app attempts an automatic Stripe refund.
 - OpenAI runs with `store: false` and a strict JSON schema.
 - Prompts explicitly prohibit invented employers, metrics, skills, achievements, dates, qualifications, or other facts.
-- The report uses a weighted recruiter scorecard, evidence coverage, target-direction analysis, copy-ready rewrites, proof-gap questions, recruiter search phrases, and a timed action plan.
+- The report uses a weighted scorecard, recruiter-fit assessment, target-role gap analysis, copy-ready headline/About options, role-specific experience bullets, exact search terms, and a seven-day action plan.
 
 ## Apify scraper
 
@@ -76,9 +79,12 @@ This keeps the scraper replaceable: if another Actor becomes more reliable or ch
 
 ## Local checks
 
-```bash
-npm run check
+```powershell
+npm.cmd run check
+npm.cmd test
 ```
+
+These checks are local and do not call Stripe, Apify, or OpenAI.
 
 ## Before launch
 

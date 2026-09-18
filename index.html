@@ -39,7 +39,9 @@
         color: var(--text);
       }
       button,
-      input {
+      input,
+      select,
+      textarea {
         font: inherit;
       }
       .shell {
@@ -127,8 +129,87 @@
         margin: 22px auto 0;
       }
       .input-wrap {
-        width: min(680px, 100%);
+        width: min(850px, 100%);
         margin: 34px auto 0;
+      }
+      .intake-card {
+        margin: 14px 0;
+        padding: 22px;
+        text-align: left;
+        background: #fff;
+        border: 1px solid #d5deeb;
+        border-radius: 14px;
+        box-shadow: 0 10px 28px rgba(31, 53, 95, 0.06);
+      }
+      .intake-card h2 {
+        margin: 0 0 6px;
+        font-size: 19px;
+        letter-spacing: -0.02em;
+      }
+      .intake-intro,
+      .field small,
+      .privacy-note {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+      .intake-intro {
+        margin: 0 0 18px;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 15px;
+      }
+      .field {
+        display: grid;
+        gap: 7px;
+      }
+      .field.full {
+        grid-column: 1 / -1;
+      }
+      .field label {
+        font-size: 13px;
+        font-weight: 750;
+      }
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        border: 1px solid #d5deeb;
+        border-radius: 9px;
+        padding: 11px 12px;
+        outline: none;
+        background: #fff;
+        color: var(--text);
+      }
+      .field textarea {
+        min-height: 92px;
+        resize: vertical;
+        line-height: 1.5;
+      }
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(49, 92, 255, 0.09);
+      }
+      .optional-evidence {
+        margin-top: 17px;
+        border-top: 1px solid var(--line);
+        padding-top: 15px;
+      }
+      .optional-evidence summary {
+        cursor: pointer;
+        color: #2846b8;
+        font-size: 13px;
+        font-weight: 800;
+      }
+      .optional-evidence .form-grid {
+        margin-top: 15px;
+      }
+      .privacy-note {
+        margin: 14px 0 0;
       }
       .url-box {
         height: 58px;
@@ -431,6 +512,7 @@
       .problem,
       .strength,
       .exp,
+      .gap,
       .action {
         border: 1px solid var(--line);
         border-radius: 11px;
@@ -487,6 +569,38 @@
         margin-top: 10px;
         color: #64748b;
         font-size: 14px;
+      }
+      .fit-grid {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 22px;
+        align-items: start;
+      }
+      .fit-score {
+        background: var(--soft);
+        border-radius: 13px;
+        padding: 20px;
+        text-align: center;
+      }
+      .fit-score strong {
+        display: block;
+        font-size: 38px;
+      }
+      .fit-score span {
+        color: var(--blue);
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+      }
+      .gap-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .gap p {
+        color: #52627a;
+        line-height: 1.55;
       }
       .results {
         background:
@@ -834,7 +948,10 @@
         .two-col,
         .inventory-grid,
         .problem-grid,
-        .target-box {
+        .target-box,
+        .form-grid,
+        .fit-grid,
+        .gap-grid {
           grid-template-columns: 1fr;
         }
         .sample-score,
@@ -881,8 +998,8 @@
             <div class="eyebrow">Complete LinkedIn profile audit</div>
             <h1>Find Out Why Your LinkedIn Profile Isn’t Working</h1>
             <p class="sub">
-              Paste your profile URL. We’ll analyse the public profile
-              recruiters see and give you the exact fixes and rewrites.
+              Tell us the role you want, then get a recruiter-style fit audit,
+              evidence gaps and exact rewrites built for that target.
             </p>
             <div class="input-wrap">
               <div class="url-box">
@@ -893,8 +1010,92 @@
                   autocomplete="url"
                 />
               </div>
+              <div class="intake-card">
+                <h2>What role are you targeting?</h2>
+                <p class="intake-intro">
+                  This turns a generic profile review into a role-specific
+                  hiring assessment.
+                </p>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="desiredJobTitle">Desired job title *</label>
+                    <input
+                      id="desiredJobTitle"
+                      maxlength="160"
+                      placeholder="e.g. Cloud Support Engineer"
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="careerGoal">Career goal *</label>
+                    <select id="careerGoal">
+                      <option value="">Select your goal…</option>
+                      <option value="new-role">
+                        Land a new role in my field
+                      </option>
+                      <option value="career-pivot">
+                        Pivot into a new career
+                      </option>
+                      <option value="promotion">
+                        Move into a more senior role
+                      </option>
+                      <option value="exploring">
+                        Explore the best next move
+                      </option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="targetLocation">Target location</label>
+                    <input
+                      id="targetLocation"
+                      maxlength="160"
+                      placeholder="e.g. London, UK or Remote"
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="targetIndustry">Target industry</label>
+                    <input
+                      id="targetIndustry"
+                      maxlength="160"
+                      placeholder="e.g. Fintech, SaaS, Healthcare"
+                    />
+                  </div>
+                </div>
+                <details class="optional-evidence">
+                  <summary>Add optional evidence for a stronger report</summary>
+                  <div class="form-grid">
+                    <div class="field full">
+                      <label for="achievements">Achievements</label>
+                      <textarea
+                        id="achievements"
+                        maxlength="2500"
+                        placeholder="Verified results, responsibilities, awards or projects that may be missing from LinkedIn…"
+                      ></textarea>
+                    </div>
+                    <div class="field full">
+                      <label for="tools">Tools and skills</label>
+                      <textarea
+                        id="tools"
+                        maxlength="1500"
+                        placeholder="Tools, platforms and skills you can genuinely demonstrate…"
+                      ></textarea>
+                    </div>
+                    <div class="field full">
+                      <label for="cvText">CV text</label>
+                      <textarea
+                        id="cvText"
+                        maxlength="8000"
+                        placeholder="Paste relevant CV text. Remove contact details or anything you do not want analysed."
+                      ></textarea>
+                    </div>
+                  </div>
+                </details>
+                <p class="privacy-note">
+                  Optional evidence is signed to this checkout and sent for the
+                  report only; it is not stored in Stripe metadata.
+                </p>
+              </div>
               <div id="error" class="error">
-                Enter a valid linkedin.com/in/... profile URL.
+                Complete the required fields above.
               </div>
               <button id="gradeBtn" class="cta">
                 Analyse My LinkedIn — £2.99 →
@@ -919,24 +1120,24 @@
               <div class="card-icon">◔</div>
               <h3>Know where your profile stands</h3>
               <p>
-                Get a 0–100 score across positioning, headline, About,
-                experience, credibility and searchability.
+                See recruiter fit and evidence-backed scores against the exact
+                role you want—not a generic profile grade.
               </p>
             </article>
             <article class="card">
               <div class="card-icon">◎</div>
               <h3>Get rewrites, not vague advice</h3>
               <p>
-                Receive a stronger headline, About rewrite, experience
-                improvements and a priority action plan.
+                Receive target-specific headlines, About copy, experience
+                bullets, keywords and a seven-day action plan.
               </p>
             </article>
             <article class="card">
               <div class="card-icon">△</div>
-              <h3>Just paste the URL</h3>
+              <h3>Give the analysis context</h3>
               <p>
-                No PDF export and no six-part form. Paste your public LinkedIn
-                profile URL and continue to secure checkout.
+                Add your goal, market and optional CV evidence so the advice is
+                honest, relevant and worth acting on.
               </p>
             </article>
           </div>
@@ -968,13 +1169,14 @@
           <div class="spinner"></div>
           <h2>Building your report</h2>
           <p class="lead">
-            Reading the public profile and scoring what recruiters see.
+            Matching the public profile and supplied evidence to your target
+            role.
           </p>
           <div class="steps">
             <div class="step active">1. Verifying payment</div>
             <div class="step">2. Reading the public LinkedIn profile</div>
-            <div class="step">3. Scoring positioning and credibility</div>
-            <div class="step">4. Writing your improvement plan</div>
+            <div class="step">3. Assessing recruiter fit and evidence gaps</div>
+            <div class="step">4. Writing role-specific copy and your plan</div>
           </div>
         </div>
       </section>
@@ -990,7 +1192,7 @@
               </div>
             </div>
             <div>
-              <div class="audit-kicker">Evidence-led profile audit · v2</div>
+              <div class="audit-kicker">Targeted recruiter-fit audit · v3</div>
               <h2 id="verdict">Your LinkedIn report</h2>
               <p id="recruiterRead"></p>
               <div id="profileMeta" class="profile-meta"></div>
@@ -1018,7 +1220,31 @@
           <section class="report-section">
             <div class="section-heading">
               <div>
-                <div class="section-eyebrow">02 · Scorecard</div>
+                <div class="section-eyebrow">02 · Recruiter fit</div>
+                <h3 id="fitTitle">Fit for your target role</h3>
+              </div>
+              <div class="section-note">
+                The likely shortlist decision and why.
+              </div>
+            </div>
+            <div id="recruiterFit" class="fit-grid"></div>
+          </section>
+          <section class="report-section">
+            <div class="section-heading">
+              <div>
+                <div class="section-eyebrow">03 · Gap analysis</div>
+                <h3>What stands between the profile and the role</h3>
+              </div>
+              <div class="section-note">
+                Missing evidence is not the same as missing ability.
+              </div>
+            </div>
+            <div id="gapList" class="gap-grid"></div>
+          </section>
+          <section class="report-section">
+            <div class="section-heading">
+              <div>
+                <div class="section-eyebrow">04 · Scorecard</div>
                 <h3>Where the profile wins and leaks value</h3>
               </div>
               <div class="section-note">
@@ -1031,7 +1257,7 @@
           <section class="report-section">
             <div class="section-heading">
               <div>
-                <div class="section-eyebrow">03 · Evidence coverage</div>
+                <div class="section-eyebrow">05 · Evidence coverage</div>
                 <h3>What the public data proves</h3>
               </div>
               <div class="section-note">
@@ -1044,7 +1270,7 @@
           <section class="report-section">
             <div class="section-heading">
               <div>
-                <div class="section-eyebrow">04 · Conversion blockers</div>
+                <div class="section-eyebrow">06 · Conversion blockers</div>
                 <h3>The three biggest problems</h3>
               </div>
               <div class="section-note">
@@ -1057,7 +1283,7 @@
           <section class="report-section">
             <div class="section-heading">
               <div>
-                <div class="section-eyebrow">05 · Leverage</div>
+                <div class="section-eyebrow">07 · Leverage</div>
                 <h3>What is already working</h3>
               </div>
             </div>
@@ -1066,7 +1292,7 @@
           <section class="report-section">
             <div class="section-heading">
               <div>
-                <div class="section-eyebrow">06 · Headline strategy</div>
+                <div class="section-eyebrow">08 · Headline strategy</div>
                 <h3>Three evidence-safe positioning options</h3>
               </div>
               <div class="section-note" id="headlineRationale"></div>
@@ -1077,7 +1303,7 @@
           <section class="report-section">
             <div class="section-heading">
               <div>
-                <div class="section-eyebrow">07 · About rewrite</div>
+                <div class="section-eyebrow">09 · About rewrite</div>
                 <h3>A copy-ready narrative with honest proof gaps</h3>
               </div>
             </div>
@@ -1096,7 +1322,7 @@
           <section class="report-section">
             <div class="section-heading">
               <div>
-                <div class="section-eyebrow">08 · Experience rewrite lab</div>
+                <div class="section-eyebrow">10 · Experience rewrite lab</div>
                 <h3>Stronger bullets without invented claims</h3>
               </div>
             </div>
@@ -1105,7 +1331,7 @@
           <section class="report-section">
             <div class="section-heading">
               <div>
-                <div class="section-eyebrow">09 · Search strategy</div>
+                <div class="section-eyebrow">11 · Search strategy</div>
                 <h3>Keywords recruiters can actually find</h3>
               </div>
             </div>
@@ -1114,11 +1340,11 @@
           <section class="report-section">
             <div class="section-heading">
               <div>
-                <div class="section-eyebrow">10 · Execution plan</div>
-                <h3>Your priority action plan</h3>
+                <div class="section-eyebrow">12 · Execution plan</div>
+                <h3>Your exact seven-day action plan</h3>
               </div>
               <div class="section-note">
-                Ordered by expected impact, with effort and time estimates.
+                One focused outcome each day, ordered by dependency and impact.
               </div>
             </div>
             <div id="actionList"></div>
@@ -1134,11 +1360,37 @@
     <script>
       const $ = (s) => document.querySelector(s),
         input = $("#profileUrl"),
+        desiredJobTitle = $("#desiredJobTitle"),
+        careerGoal = $("#careerGoal"),
         error = $("#error"),
         landing = $("#landing"),
         loading = $("#loading"),
         results = $("#results"),
         steps = [...document.querySelectorAll(".step")];
+      const DRAFT_KEY = "linkedin-grader:intake-draft";
+      const intake = () => ({
+        profileUrl: input.value.trim(),
+        desiredJobTitle: desiredJobTitle.value.trim(),
+        careerGoal: careerGoal.value,
+        targetLocation: $("#targetLocation").value.trim(),
+        targetIndustry: $("#targetIndustry").value.trim(),
+        achievements: $("#achievements").value.trim(),
+        tools: $("#tools").value.trim(),
+        cvText: $("#cvText").value.trim(),
+      });
+      function saveDraft() {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(intake()));
+      }
+      function restoreDraft() {
+        try {
+          const draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null");
+          if (!draft) return;
+          Object.entries(draft).forEach(([key, value]) => {
+            const element = document.getElementById(key);
+            if (element && typeof value === "string") element.value = value;
+          });
+        } catch {}
+      }
       function valid(v) {
         try {
           const u = new URL(
@@ -1168,18 +1420,32 @@
       }
       $("#gradeBtn").onclick = async () => {
         if (!valid(input.value)) {
+          error.textContent = "Enter a valid linkedin.com/in/... profile URL.";
           error.classList.add("show");
           return input.focus();
         }
+        if (!desiredJobTitle.value.trim()) {
+          error.textContent = "Add the job title you want to target.";
+          error.classList.add("show");
+          return desiredJobTitle.focus();
+        }
+        if (!careerGoal.value) {
+          error.textContent = "Choose your career goal or pivot.";
+          error.classList.add("show");
+          return careerGoal.focus();
+        }
         error.classList.remove("show");
+        saveDraft();
         const b = $("#gradeBtn"),
           old = b.textContent;
         b.disabled = true;
         b.textContent = "Opening secure checkout…";
         try {
-          const d = await post("/api/create-checkout", {
-            profileUrl: input.value,
-          });
+          const d = await post("/api/create-checkout", intake());
+          localStorage.setItem(
+            "linkedin-context:" + d.sessionId,
+            d.contextToken,
+          );
           location.href = d.checkoutUrl;
         } catch (e) {
           error.textContent = e.message;
@@ -1188,7 +1454,10 @@
           b.textContent = old;
         }
       };
-      input.oninput = () => error.classList.remove("show");
+      document.querySelector(".input-wrap").addEventListener("input", () => {
+        error.classList.remove("show");
+        saveDraft();
+      });
       input.onkeydown = (e) => {
         if (e.key === "Enter") $("#gradeBtn").click();
       };
@@ -1196,7 +1465,11 @@
         const u = new URL(location.href);
         u.search = "";
         history.replaceState({}, "", u);
-        input.value = "";
+        document
+          .querySelectorAll(".input-wrap input, .input-wrap textarea")
+          .forEach((element) => (element.value = ""));
+        careerGoal.value = "";
+        localStorage.removeItem(DRAFT_KEY);
         results.classList.remove("failed");
         show("landing");
       };
@@ -1246,7 +1519,8 @@
         box.style.display = "none";
         box.textContent = "";
         const r = d.report || {},
-          p = d.profile || {};
+          p = d.profile || {},
+          brief = d.target || {};
         $("#overallScore").textContent = r.overall_score ?? "--";
         document
           .querySelector(".result-top .score-ring")
@@ -1273,6 +1547,18 @@
         const target = r.target_alignment || {};
         $("#targetAlignment").innerHTML =
           `<div><span class="mini-label">Inferred current direction</span><strong>${esc(target.inferred_path)}</strong><p>${esc(target.ambiguity)}</p><ul>${list(target.evidence)}</ul></div><div class="confidence">${esc(target.confidence)} confidence</div>`;
+        $("#fitTitle").textContent = brief.desiredJobTitle
+          ? `Recruiter fit for ${brief.desiredJobTitle}`
+          : "Fit for your target role";
+        const fit = r.recruiter_fit || {};
+        $("#recruiterFit").innerHTML =
+          `<div class="fit-score"><strong>${esc(fit.fit_score ?? "--")}</strong><span>${esc(fit.fit_level || "fit")}</span></div><div><p>${esc(fit.assessment)}</p><div class="two-col"><div><span class="mini-label">Strongest matches</span><ul>${list(fit.strongest_matches)}</ul></div><div><span class="mini-label">Hiring risks</span><ul>${list(fit.hiring_risks)}</ul></div></div><p class="fix"><strong>Likely recruiter decision:</strong> ${esc(fit.recruiter_decision)}</p></div>`;
+        $("#gapList").innerHTML = (r.gap_analysis || [])
+          .map(
+            (x) =>
+              `<div class="gap"><div class="severity">${esc(x.priority)} priority</div><b>${esc(x.gap)}</b><p><strong>Current evidence:</strong> ${esc(x.current_evidence)}</p><p>${esc(x.why_it_matters)}</p><p class="fix"><strong>Exact fix:</strong> ${esc(x.exact_fix)}</p></div>`,
+          )
+          .join("");
         const labels = {
           positioning: "Positioning",
           headline: "Headline",
@@ -1284,7 +1570,7 @@
         $("#scoreList").innerHTML = Object.entries(r.scores || {})
           .map(
             ([k, v]) =>
-              `<div class="score-item"><div class="score-item-top"><strong>${esc(labels[k] || k)}</strong><span class="score-number">${esc(v.score)}/100</span></div><div class="bar"><i style="width:${Math.max(0, Math.min(100, Number(v.score) || 0))}%"></i></div><p>${esc(v.diagnosis)}</p><p class="next-step"><strong>Next:</strong> ${esc(v.next_step)}</p></div>`,
+              `<div class="score-item"><div class="score-item-top"><strong>${esc(labels[k] || k)}</strong><span class="score-number">${esc(v.score)}/100</span></div><div class="bar"><i style="width:${Math.max(0, Math.min(100, Number(v.score) || 0))}%"></i></div><p>${esc(v.diagnosis)}</p><span class="mini-label">Evidence used</span><ul>${list(v.evidence)}</ul><p class="next-step"><strong>Next:</strong> ${esc(v.next_step)}</p></div>`,
           )
           .join("");
         const inventory = r.content_inventory || {};
@@ -1325,16 +1611,16 @@
         const keywords = r.keyword_strategy || {};
         $("#keywordStrategy").innerHTML =
           `<div class="keyword-group"><span class="mini-label">Primary terms</span><div class="keywords">${(keywords.primary || []).map((x) => `<span class="keyword">${esc(x)}</span>`).join("")}</div></div><div class="keyword-group"><span class="mini-label">Supporting terms</span><div class="keywords">${(keywords.secondary || []).map((x) => `<span class="keyword">${esc(x)}</span>`).join("")}</div></div><div class="keyword-group"><span class="mini-label">Recruiter search phrases</span><div class="two-col">${(keywords.recruiter_search_phrases || []).map((x) => `<div class="search-phrase">${esc(x)}</div>`).join("")}</div></div><p class="section-note" style="text-align:left;max-width:none">${esc(keywords.caution)}</p>`;
-        $("#actionList").innerHTML = (r.priority_actions || [])
+        $("#actionList").innerHTML = (r.seven_day_plan || [])
           .map(
             (x) =>
-              `<div class="action"><div class="action-number">${esc(x.priority)}</div><div><strong>${esc(x.action)}</strong><p>${esc(x.why)}</p></div><div class="action-meta">${esc(x.impact)} impact · ${esc(x.effort)} effort · ${esc(x.estimated_minutes)} min</div></div>`,
+              `<div class="action"><div class="action-number">${esc(x.day)}</div><div><strong>Day ${esc(x.day)} · ${esc(x.focus)}</strong><ul>${list(x.tasks)}</ul><p><strong>Outcome:</strong> ${esc(x.outcome)}</p></div><div class="action-meta">${esc(x.estimated_minutes)} min</div></div>`,
           )
           .join("");
         show("results");
       }
       async function analyse(id) {
-        const key = "linkedin-report:v2:" + id,
+        const key = "linkedin-report:v3:" + id,
           cached = localStorage.getItem(key);
         if (cached) {
           try {
@@ -1348,9 +1634,13 @@
           steps.forEach((s, n) => s.classList.toggle("active", n <= i));
         }, 750);
         try {
-          const d = await post("/api/analyze", { sessionId: id });
+          const tokenKey = "linkedin-context:" + id;
+          const contextToken = localStorage.getItem(tokenKey) || "";
+          const d = await post("/api/analyze", { sessionId: id, contextToken });
           clearInterval(timer);
           localStorage.setItem(key, JSON.stringify(d));
+          localStorage.removeItem(tokenKey);
+          localStorage.removeItem(DRAFT_KEY);
           render(d);
           const u = new URL(location.href);
           u.search = "";
@@ -1365,6 +1655,7 @@
         }
       }
       (() => {
+        restoreDraft();
         const q = new URLSearchParams(location.search);
         if (q.get("cancelled") === "1") {
           $("#cancelNote").style.display = "block";
